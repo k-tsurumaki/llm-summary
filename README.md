@@ -1,26 +1,27 @@
-# 🤖 LLM要約サービス
+# 🤖 LLM Text Summarization Service
 
 [![Go Version](https://img.shields.io/badge/Go-1.23-blue.svg)](https://golang.org/)
 [![fuselage](https://img.shields.io/badge/fuselage-Framework-purple.svg)](https://github.com/k-tsurumaki/fuselage)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**fuselageフレームワーク**を使用したシンプルで高性能なテキスト要約サービス。軽量なGoアプリケーションとして動作します。
+A high-performance text summarization service powered by **fuselage framework** and **OpenRouter API**. Built as a lightweight Go application with LLM integration.
 
-## ✨ 特徴
+## ✨ Features
 
-- 🚀 **高速処理**: fuselageフレームワークによる軽量・高速なAPI
-- 🧠 **テキスト要約**: シンプルなテキスト処理アルゴリズム
-- 🌐 **Webインターフェース**: 直感的で使いやすいWebUI
-- ⚡ **軽量**: 外部依存なしのスタンドアロンアプリ
-- 📱 **レスポンシブ**: モバイル・デスクトップ両対応
-- 🔒 **CORS対応**: フロントエンドからの安全なAPI呼び出し
+- 🚀 **High Performance**: Lightweight and fast API powered by fuselage framework
+- 🧠 **AI-Powered Summarization**: Uses OpenRouter API with Google Gemma model
+- 🌐 **RESTful API**: Clean and simple JSON API endpoints
+- ⚡ **Lightweight**: Minimal dependencies and fast startup
+- 🔒 **CORS Support**: Safe API calls from frontend applications
+- 📊 **Health Monitoring**: Built-in health check endpoint
+- 🛡️ **Graceful Shutdown**: Proper server lifecycle management
 
-## 🏗️ アーキテクチャ
+## 🏗️ Architecture
 
 ```mermaid
 graph LR
-    A[🌐 Webブラウザ] --> B[⚡ Go API Server<br/>fuselage]
-    B --> C[📝 テキスト処理<br/>エンジン]
+    A[🌐 Client] --> B[⚡ Go API Server<br/>fuselage]
+    B --> C[🤖 OpenRouter API<br/>Google Gemma]
     C --> B
     B --> A
     
@@ -29,188 +30,208 @@ graph LR
     style C fill:#fff3e0
 ```
 
-## 🚀 クイックスタート
+## 🚀 Quick Start
 
-### 前提条件
+### Prerequisites
 
 - Go 1.23+
-- fuselageフレームワーク
+- OpenRouter API key
+- fuselage framework
 
-### 1. リポジトリのクローン
+### 1. Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/k-tsurumaki/llm-summary.git
 cd llm-summary
 ```
 
-### 2. 依存関係のインストール
+### 2. Install Dependencies
 
 ```bash
 go mod tidy
 ```
 
-### 3. サービス起動
+### 3. Configuration
+
+Create a `config.ini` file:
+
+```ini
+[web]
+port = 8080
+
+[llm]
+api_key = your_openrouter_api_key_here
+base_url = https://openrouter.ai/api/v1
+```
+
+### 4. Start Service
 
 ```bash
 go run .
 ```
 
-### 4. アクセス確認
+### 5. Test API
 
-🌐 **Webインターフェース**: http://localhost:8080/
+🌐 **Health Check**: http://localhost:8080/health
 
-## 📖 API リファレンス
+## 📖 API Reference
 
-### 要約API
+### Summarization API
 
-**エンドポイント**: `POST /summarize`
+**Endpoint**: `POST /summarize`
 
-**リクエスト**:
+**Request**:
 ```json
 {
-  "text": "要約したい長文テキストをここに入力してください。この文章は自動的にAIによって要約され、重要なポイントが抽出されます。"
+  "text": "Your long text to be summarized goes here. This text will be automatically processed by AI to extract key points and generate a concise summary."
 }
 ```
 
-**成功レスポンス**:
+**Success Response**:
 ```json
 {
-  "summary": "テキスト処理エンジンによって生成された要約テキスト。"
+  "summary": "AI-generated summary of the input text."
 }
 ```
 
-**エラーレスポンス**:
+**Error Response**:
 ```json
 {
   "error": "Text field is required"
 }
 ```
 
-**cURLサンプル**:
+**cURL Example**:
 ```bash
 curl -X POST http://localhost:8080/summarize \
   -H "Content-Type: application/json" \
   -d '{
-    "text": "昨日、東京で開催された技術カンファレンスに参加しました。最新のAI技術について多くの発表があり、特に自然言語処理の進歩が印象的でした。多くの企業がGPTを活用したサービスを展開しており、今後のビジネスへの影響が期待されます。"
+    "text": "Yesterday, I attended a technology conference in Tokyo. There were many presentations about the latest AI technologies, and the progress in natural language processing was particularly impressive. Many companies are deploying services that utilize GPT, and the impact on future business is expected."
   }'
 ```
 
-### ヘルスチェック
+### Health Check
 
-**エンドポイント**: `GET /health`
+**Endpoint**: `GET /health`
 
-**レスポンス**:
+**Response**:
 ```json
 {
   "status": "ok"
 }
 ```
 
-## 🖥️ Webインターフェース
+## 🔧 Configuration
 
-### 機能
+### Environment Variables
 
-- 📝 **テキスト入力**: 大きなテキストエリアで長文入力に対応
-- ⚡ **リアルタイム要約**: ボタンクリックで即座に要約実行
-- 📱 **レスポンシブデザイン**: スマートフォンでも快適に利用
-- 🎨 **モダンUI**: 直感的で美しいインターフェース
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `PORT` | Server port | `8080` | ❌ |
 
-### 使用方法
+### Configuration File
 
-1. http://localhost:8080/ にアクセス
-2. テキストエリアに要約したい文章を入力
-3. 「要約する」ボタンをクリック
-4. 数秒で要約結果が表示されます
+The service uses `config.ini` for configuration:
 
-## 🛠️ 開発
+```ini
+[web]
+port = 8080
 
-### ローカル開発環境
+[llm]
+api_key = your_openrouter_api_key
+base_url = https://openrouter.ai/api/v1
+```
+
+**Note**: The `config.ini` file is excluded from version control for security reasons.
+
+## 🛠️ Development
+
+### Local Development
 
 ```bash
-# 依存関係のインストール
+# Install dependencies
 go mod tidy
 
-# 開発サーバー起動
+# Start development server
 go run .
 ```
 
-### プロジェクト構造
+### Project Structure
 
 ```
 llm-summary/
-├── 📁 static/           # Webインターフェース
-│   └── index.html       # メインHTML
-├── 📄 main.go          # アプリケーションエントリーポイント
-├── 📄 routes.go        # APIルート定義
-├── 📄 llm_client.go    # テキスト処理クライアント
-├── 📄 go.mod           # Go モジュール定義
-└── 📄 README.md        # このファイル
+├── 📄 main.go          # Application entry point
+├── 📄 routes.go        # API route definitions
+├── 📄 llm_client.go    # OpenRouter API client
+├── 📄 config.go        # Configuration management
+├── 📄 go.mod           # Go module definition
+├── 📄 config.ini       # Configuration file (excluded from git)
+└── 📄 README.md        # This file
 ```
 
-### 技術スタック
+### Tech Stack
 
-| 技術 | 用途 | バージョン |
-|------|------|----------|
-| **Go** | バックエンドAPI | 1.23+ |
-| **fuselage** | Webフレームワーク | latest |
-| **HTML/CSS/JS** | フロントエンド | ES6+ |
+| Technology | Purpose | Version |
+|------------|---------|----------|
+| **Go** | Backend API | 1.23+ |
+| **fuselage** | Web framework | latest |
+| **OpenRouter** | LLM API service | - |
+| **Google Gemma** | AI model | 3-27b-it |
+| **INI** | Configuration | - |
 
-## 🔧 設定オプション
+## 🚨 Troubleshooting
 
-### 環境変数
+### Common Issues
 
-| 変数名 | 説明 | デフォルト値 | 必須 |
-|--------|------|-------------|------|
-| `PORT` | サーバーポート | `8080` | ❌ |
+**Q: Port 8080 already in use**
 
-## 🚨 トラブルシューティング
-
-### よくある問題
-
-**Q: ポート8080が使用中エラー**
-
-A: 環境変数でポートを変更してください。
+A: Change the port in `config.ini` or use environment variable:
 
 ```bash
 PORT=8081 go run .
 ```
 
-**Q: fuselageフレームワークが見つからない**
+**Q: fuselage framework not found**
 
-A: fuselageフレームワークが正しくパスに配置されているか確認してください。
+A: Ensure the fuselage framework is properly installed and accessible in your Go path.
 
-**Q: CORS エラーが発生する**
+**Q: OpenRouter API errors**
 
-A: 同一オリジンからアクセスしているか確認してください。
+A: Check your API key in `config.ini` and ensure you have sufficient credits.
 
-## 📈 パフォーマンス
+**Q: CORS errors**
 
-- **応答時間**: 平均100ms未満
-- **同時接続**: 1000+リクエスト/秒
-- **メモリ使用量**: ~10MB
-- **バイナリサイズ**: ~5MB
+A: The service includes CORS headers for cross-origin requests.
 
-## 🤝 コントリビューション
+## 📈 Performance
 
-1. このリポジトリをフォーク
-2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+- **Response Time**: Depends on OpenRouter API latency
+- **Concurrent Requests**: 1000+ requests/second
+- **Memory Usage**: ~10MB
+- **Binary Size**: ~5MB
 
-## 📄 ライセンス
+## 🤝 Contributing
 
-MIT License - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
 
-## 🙏 謝辞
+## 📄 License
 
-- [fuselage](https://github.com/k-tsurumaki/fuselage) - 軽量Goフレームワーク
-- Goコミュニティ - 素晴らしいプログラミング言語
-- コミュニティの皆様のフィードバックとコントリビューション
+MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [fuselage](https://github.com/k-tsurumaki/fuselage) - Lightweight Go web framework
+- [OpenRouter](https://openrouter.ai/) - LLM API service
+- Go community - Amazing programming language and ecosystem
+- Contributors and community feedback
 
 ---
 
 <div align="center">
   <p>Made with ❤️ by the LLM Summary Team</p>
-  <p>⭐ このプロジェクトが役に立ったらスターをお願いします！</p>
+  <p>⭐ Star this project if you find it helpful!</p>
 </div>
