@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"gopkg.in/go-ini/ini.v1"
 )
@@ -25,7 +26,8 @@ func LoadConfig() {
 	}
 	Config = ConfigList{
 		PORT:         cfg.Section("web").Key("port").String(),
-		LLM_API_KEY:  cfg.Section("llm").Key("api_key").String(),
 		LLM_BASE_URL: cfg.Section("llm").Key("base_url").String(),
+		LLM_API_KEY:  os.Getenv("LLM_API_KEY"),
 	}
+	log.Printf("Config loaded: %+v", Config)
 }

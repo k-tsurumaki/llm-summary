@@ -53,6 +53,12 @@ go mod tidy
 
 ### 3. Configuration
 
+Set the `LLM_API_KEY` environment variable:
+
+```bash
+export LLM_API_KEY="your_openrouter_api_key"
+```
+
 Create a `config.ini` file:
 
 ```ini
@@ -60,7 +66,6 @@ Create a `config.ini` file:
 port = 8080
 
 [llm]
-api_key = your_openrouter_api_key_here
 base_url = https://openrouter.ai/api/v1
 ```
 
@@ -128,6 +133,7 @@ curl -X POST http://localhost:8080/summarize \
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
 | `PORT` | Server port | `8080` | ❌ |
+| `LLM_API_KEY` | OpenRouter API key | N/A | ✅ |
 
 ### Configuration File
 
@@ -138,7 +144,6 @@ The service uses `config.ini` for configuration:
 port = 8080
 
 [llm]
-api_key = your_openrouter_api_key
 base_url = https://openrouter.ai/api/v1
 ```
 
@@ -151,6 +156,9 @@ base_url = https://openrouter.ai/api/v1
 ```bash
 # Install dependencies
 go mod tidy
+
+# Set the LLM_API_KEY environment variable
+export LLM_API_KEY="your_openrouter_api_key"
 
 # Start development server
 go run .
@@ -197,7 +205,7 @@ A: Ensure the fuselage framework is properly installed and accessible in your Go
 
 **Q: OpenRouter API errors**
 
-A: Check your API key in `config.ini` and ensure you have sufficient credits.
+A: Check your `LLM_API_KEY` environment variable and ensure you have sufficient credits.
 
 **Q: CORS errors**
 
